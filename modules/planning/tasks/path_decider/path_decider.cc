@@ -88,7 +88,13 @@ bool PathDecider::MakeStaticObstacleDecision(
 
   for (const auto *path_obstacle : path_decision->path_obstacles().Items()) {
     const auto &obstacle = *path_obstacle->obstacle();
-    if (!obstacle.IsStatic()) {
+    bool is_bycycle_or_pedestrain =
+        (obstacle.Perception().type() ==
+             perception::PerceptionObstacle::BICYCLE ||
+         obstacle.Perception().type() ==
+             perception::PerceptionObstacle::PEDESTRIAN);
+
+    if (!is_bycycle_or_pedestrain && !obstacle.IsStatic()) {
       continue;
     }
     if (path_obstacle->HasLongitudinalDecision() &&
@@ -102,7 +108,7 @@ bool PathDecider::MakeStaticObstacleDecision(
       continue;
     }
 
-    if (path_obstacle->st_boundary().boundary_type() ==
+    if (path_obstacle->reference_line_st_boundary().boundary_type() ==
         StBoundary::BoundaryType::KEEP_CLEAR) {
       continue;
     }
@@ -113,7 +119,7 @@ bool PathDecider::MakeStaticObstacleDecision(
 
     const auto &sl_boundary = path_obstacle->PerceptionSLBoundary();
 
-    if (sl_boundary.start_s() < frenet_points.front().s() ||
+    if (sl_boundary.end_s() < frenet_points.front().s() ||
         sl_boundary.start_s() > frenet_points.back().s()) {
       path_decision->AddLongitudinalDecision("PathDecider/not-in-s",
                                              obstacle.Id(), object_decision);
@@ -122,7 +128,7 @@ bool PathDecider::MakeStaticObstacleDecision(
       continue;
     }
 
-    const auto frenet_point = frenet_path.EvaluateByS(sl_boundary.start_s());
+    const auto frenet_point = frenet_path.GetNearestPoint(sl_boundary);
     const double curr_l = frenet_point.l();
     if (curr_l - lateral_radius > sl_boundary.end_l() ||
         curr_l + lateral_radius < sl_boundary.start_l()) {

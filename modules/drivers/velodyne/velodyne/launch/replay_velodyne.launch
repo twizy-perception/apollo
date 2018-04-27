@@ -2,25 +2,27 @@
     <arg name="velodyne16_calibration_online" default="true" />
     <!--If 'velodyne16_calibration_online' is true, 'velodyne16_calibration_file' will not use  -->
     <arg name="param_folder" default="$(find velodyne_pointcloud)/params"/>
-    <arg name="velodyne16_calibration_file" default="$(arg param_folder)/64E_S3_calibration_example.yaml"/> 
+    <arg name="velodyne16_calibration_file" default="$(arg param_folder)/64E_S3_calibration_example.yaml"/>
     <arg name="extrinsics_velodyne16" default="$(arg param_folder)/velodyne16_novatel_extrinsics_example.yaml"/>
     <arg name="organized" default="false"/>
     <arg name="min_range" default="0.9" />
     <arg name="max_range_64" default="70.0" />
     <arg name="rpm" default="600"/>
     <arg name="tf_query_timeout" default="0.1"/>
-    <arg name="velodyne16_frame_id" default="velodyne16"/> 
+    <arg name="velodyne16_frame_id" default="velodyne16"/>
+    <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)"/>
 
     <!-- start rosbag replay -->
   <include file="$(find velodyne_pointcloud)/launch/rosbag_replay.launch">
     <arg name="rate" default="1" />
     <arg name="start" default="0" />
     <arg name="bag" value="" />
-  </include> 
+  </include>
 
   <include file="$(find velodyne_pointcloud)/launch/nodelet_manager.launch">
+    <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)"/>
   </include>
-    <!--  HDL64E -->  
+    <!--  HDL64E -->
   <!-- start cloud nodelet using test calibration file -->
   <include file="$(find velodyne_pointcloud)/launch/convert_nodelet.launch">
     <arg name="model" default="64E_S3D_STRONGEST" />
@@ -32,6 +34,7 @@
     <arg name="topic_pointcloud" default="/apollo/sensor/velodyne16/PointCloud2"/>
     <arg name="topic_packets" default="/apollo/sensor/velodyne16/VelodyneScanUnified"/>
     <arg name="node_name" value="sensor_velodyne16_convert"/>
+    <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)"/>
   </include>
 
    <!-- start 64 compensator nodelet -->
@@ -45,9 +48,10 @@
 
   <node pkg="velodyne_pointcloud" type="extrinsics_broadcaster.py"
     args="$(arg extrinsics_velodyne16)" name="static_transform_velodyne16" />
-  
+    <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)"/>
+
   <node pkg="nodelet" type="nodelet" name="tf_broadcaster_nodelet"
-        args="load gnss_driver/TFBroadcasterNodelet velodyne_nodelet_manager" output="screen">
+        args="load gnss_driver/TFBroadcasterNodelet $(arg nodelet_manager_name)" output="screen">
   </node>
 
 </launch>

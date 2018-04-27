@@ -29,7 +29,7 @@
 #include "tf/transform_listener.h"
 #include "tf2_ros/transform_listener.h"
 
-#include "modules/perception/lib/base/timer.h"
+#include "modules/common/time/timer.h"
 #include "modules/perception/onboard/subnode.h"
 #include "modules/perception/onboard/subnode_helper.h"
 #include "modules/perception/traffic_light/base/image.h"
@@ -81,7 +81,7 @@ class TLPreprocessorSubnode : public Subnode {
   // @brief sub short focus camera
   void SubShortFocusCamera(const sensor_msgs::Image &msg);
 
-  void SubCameraImage(std::shared_ptr<const sensor_msgs::Image> msg,
+  void SubCameraImage(boost::shared_ptr<const sensor_msgs::Image> msg,
                       CameraId camera_id);
 
   void CameraSelection(double ts);
@@ -119,4 +119,3 @@ REGISTER_SUBNODE(TLPreprocessorSubnode);
 }  // namespace apollo
 
 #endif  // MODULES_PERCEPTION_TRAFFIC_LIGHT_ONBOARD_TL_PREPROCESSOR_SUBNODE_H_
-

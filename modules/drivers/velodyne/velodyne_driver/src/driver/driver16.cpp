@@ -26,7 +26,7 @@ namespace apollo {
 namespace drivers {
 namespace velodyne {
 
-Velodyne16Driver::Velodyne16Driver(Config config) {
+Velodyne16Driver::Velodyne16Driver(const Config &config) {
   config_ = config;
 }
 

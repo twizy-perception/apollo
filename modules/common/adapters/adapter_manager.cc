@@ -31,9 +31,7 @@ void AdapterManager::Observe() {
   }
 }
 
-bool AdapterManager::Initialized() {
-  return instance()->initialized_;
-}
+bool AdapterManager::Initialized() { return instance()->initialized_; }
 
 void AdapterManager::Reset() {
   instance()->initialized_ = false;
@@ -137,8 +135,14 @@ void AdapterManager::Init(const AdapterManagerConfig &configs) {
       case AdapterConfig::CONTI_RADAR:
         EnableContiRadar(FLAGS_conti_radar_topic, config);
         break;
+      case AdapterConfig::ULTRASONIC_RADAR:
+        EnableUltrasonic(FLAGS_ultrasonic_radar_topic, config);
+        break;
       case AdapterConfig::COMPRESSED_IMAGE:
         EnableCompressedImage(FLAGS_compressed_image_topic, config);
+        break;
+      case AdapterConfig::IMAGE_FRONT:
+        EnableImageFront(FLAGS_image_front_topic, config);
         break;
       case AdapterConfig::IMAGE_SHORT:
         EnableImageShort(FLAGS_image_short_topic, config);
@@ -147,7 +151,7 @@ void AdapterManager::Init(const AdapterManagerConfig &configs) {
         EnableImageLong(FLAGS_image_long_topic, config);
         break;
       case AdapterConfig::DRIVE_EVENT:
-        EnableImageLong(FLAGS_drive_event_topic, config);
+        EnableDriveEvent(FLAGS_drive_event_topic, config);
         break;
       case AdapterConfig::GNSS_RTK_OBS:
         EnableGnssRtkObs(FLAGS_gnss_rtk_obs_topic, config);
@@ -169,6 +173,44 @@ void AdapterManager::Init(const AdapterManagerConfig &configs) {
         break;
       case AdapterConfig::LOCALIZATION_MSF_STATUS:
         EnableLocalizationMsfStatus(FLAGS_localization_msf_status, config);
+        break;
+      case AdapterConfig::RELATIVE_MAP:
+        EnableRelativeMap(FLAGS_relative_map_topic, config);
+        break;
+      case AdapterConfig::NAVIGATION:
+        EnableNavigation(FLAGS_navigation_topic, config);
+        break;
+      case AdapterConfig::VOICE_DETECTION_REQUEST:
+        EnableVoiceDetectionRequest(FLAGS_voice_detection_request_topic,
+                                    config);
+        break;
+      case AdapterConfig::VOICE_DETECTION_RESPONSE:
+        EnableVoiceDetectionResponse(FLAGS_voice_detection_response_topic,
+                                     config);
+        break;
+      // For pandora.
+      case AdapterConfig::PANDORA_POINT_CLOUD:
+        EnablePandoraPointCloud(FLAGS_pandora_pointcloud_topic, config);
+        break;
+      case AdapterConfig::PANDORA_CAMERA_FRONT_COLOR:
+        EnablePandoraCameraFrontColor(FLAGS_pandora_camera_front_color_topic,
+                                      config);
+        break;
+      case AdapterConfig::PANDORA_CAMERA_RIGHT_GRAY:
+        EnablePandoraCameraRightGray(FLAGS_pandora_camera_right_gray_topic,
+                                     config);
+        break;
+      case AdapterConfig::PANDORA_CAMERA_LEFT_GRAY:
+        EnablePandoraCameraLeftGray(FLAGS_pandora_camera_left_gray_topic,
+                                    config);
+        break;
+      case AdapterConfig::PANDORA_CAMERA_FRONT_GRAY:
+        EnablePandoraCameraFrontGray(FLAGS_pandora_camera_front_gray_topic,
+                                     config);
+        break;
+      case AdapterConfig::PANDORA_CAMERA_BACK_GRAY:
+        EnablePandoraCameraBackGray(FLAGS_pandora_camera_back_gray_topic,
+                                    config);
         break;
       default:
         AERROR << "Unknown adapter config type!";

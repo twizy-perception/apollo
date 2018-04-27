@@ -16,12 +16,11 @@
 
 #include "modules/perception/obstacle/radar/modest/modest_radar_detector.h"
 
-#include <memory>
+#include "modules/perception/common/perception_gflags.h"
 #include "modules/perception/lib/config_manager/config_manager.h"
 #include "modules/perception/obstacle/radar/modest/conti_radar_util.h"
 #include "modules/perception/obstacle/radar/modest/object_builder.h"
 #include "modules/perception/obstacle/radar/modest/radar_util.h"
-#include "modules/perception/common/perception_gflags.h"
 
 namespace apollo {
 namespace perception {
@@ -29,12 +28,17 @@ namespace perception {
 bool ModestRadarDetector::Init() {
   using apollo::perception::ConfigManager;
   using apollo::perception::ModelConfig;
-  const ModelConfig *model_config = nullptr;
-  if (!ConfigManager::instance()->GetModelConfig(name(), &model_config)) {
+  const ModelConfig *model_config =
+      ConfigManager::instance()->GetModelConfig(name());
+  if (model_config == nullptr) {
     AERROR << "not found model config: " << name();
     return false;
   }
-  if (!model_config->GetValue("use_had_map", &use_had_map_)) {
+  if (FLAGS_use_navigation_mode) {
+    use_had_map_ = false;
+  }
+  if (!FLAGS_use_navigation_mode &&
+      !model_config->GetValue("use_had_map", &use_had_map_)) {
     AERROR << "use_had_map not found.";
     return false;
   }
@@ -160,15 +164,16 @@ bool ModestRadarDetector::Init() {
   return true;
 }
 
-bool ModestRadarDetector::Detect(const ContiRadar &raw_obstacles,
-                                 const std::vector<PolygonDType> &map_polygons,
-                                 const RadarDetectorOptions &options,
-                                 std::vector<ObjectPtr> *objects) {
+bool ModestRadarDetector::Detect(
+    const ContiRadar &raw_obstacles,
+    const std::vector<PolygonDType> &map_polygons,
+    const RadarDetectorOptions &options,
+    std::vector<std::shared_ptr<Object>> *objects) {
   if (objects == nullptr) {
     AERROR << "Objects is nullptr";
     return false;
   }
-  AINFO << "Modest radar detector.";
+  ADEBUG << "Modest radar detector.";
   Eigen::Matrix4d radar_pose;
   if (options.radar2world_pose == nullptr) {
     AERROR << "radar2world_pose is nullptr.";
@@ -177,37 +182,44 @@ bool ModestRadarDetector::Detect(const ContiRadar &raw_obstacles,
     radar_pose = *(options.radar2world_pose);
   }
   Eigen::Vector2d main_velocity;
-  main_velocity[0] = options.car_linear_speed[0];
-  main_velocity[1] = options.car_linear_speed[1];
+  if (FLAGS_use_navigation_mode) {
+    main_velocity[0] = 0;
+    main_velocity[1] = 0;
+  } else {
+    main_velocity[0] = options.car_linear_speed[0];
+    main_velocity[1] = options.car_linear_speed[1];
+  }
   // preparation
 
   SensorObjects radar_objects;
-  object_builder_.Build(
-    raw_obstacles, radar_pose, main_velocity, &radar_objects);
-  radar_objects.timestamp = static_cast<double>(
-    raw_obstacles.header().timestamp_sec());
-  radar_objects.sensor_type = RADAR;
+  object_builder_.Build(raw_obstacles, radar_pose, main_velocity,
+                        &radar_objects);
+  radar_objects.timestamp =
+      static_cast<double>(raw_obstacles.header().timestamp_sec());
+  radar_objects.sensor_type = SensorType::RADAR;
 
   // roi filter
   auto &filter_objects = radar_objects.objects;
   RoiFilter(map_polygons, &filter_objects);
   // treatment
   radar_tracker_->Process(radar_objects);
-  AINFO << "After process, object size: " << radar_objects.objects.size();
+  ADEBUG << "After process, object size: " << radar_objects.objects.size();
   CollectRadarResult(objects);
-  AINFO << "radar object size: " << objects->size();
+  ADEBUG << "radar object size: " << objects->size();
   return true;
 }
 
-bool ModestRadarDetector::CollectRadarResult(std::vector<ObjectPtr> *objects) {
+bool ModestRadarDetector::CollectRadarResult(
+    std::vector<std::shared_ptr<Object>> *objects) {
   std::vector<RadarTrack> &obs_track = radar_tracker_->GetTracks();
   if (objects == nullptr) {
     AERROR << "objects is nullptr";
     return false;
   }
   for (size_t i = 0; i < obs_track.size(); ++i) {
-    ObjectPtr object_ptr = ObjectPtr(new Object());
-    const ObjectPtr &object_radar_ptr = obs_track[i].GetObsRadar();
+    std::shared_ptr<Object> object_ptr = std::shared_ptr<Object>(new Object());
+    const std::shared_ptr<Object> &object_radar_ptr =
+        obs_track[i].GetObsRadar();
     if (use_fp_filter_ && object_radar_ptr->is_background) {
       continue;
     }
@@ -222,8 +234,8 @@ bool ModestRadarDetector::CollectRadarResult(std::vector<ObjectPtr> *objects) {
 
 void ModestRadarDetector::RoiFilter(
     const std::vector<PolygonDType> &map_polygons,
-    std::vector<ObjectPtr>* filter_objects) {
-  AINFO << "Before using hdmap, object size:" << filter_objects->size();
+    std::vector<std::shared_ptr<Object>> *filter_objects) {
+  ADEBUG << "Before using hdmap, object size:" << filter_objects->size();
   // use new hdmap
   if (use_had_map_) {
     if (!map_polygons.empty()) {
@@ -240,12 +252,12 @@ void ModestRadarDetector::RoiFilter(
         }
       }
       filter_objects->resize(obs_number);
-      AINFO << "query hdmap sucessfully!";
+      ADEBUG << "query hdmap sucessfully!";
     } else {
-      AINFO << "query hdmap unsuccessfully!";
+      ADEBUG << "query hdmap unsuccessfully!";
     }
   }
-  AINFO << "After using hdmap, object size:" << filter_objects->size();
+  ADEBUG << "After using hdmap, object size:" << filter_objects->size();
 }
 
 }  // namespace perception

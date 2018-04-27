@@ -23,10 +23,14 @@
 #define MODULES_PREDICTION_PREDICTOR_SEQUENCE_SEQUENCE_PREDICTOR_H_
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
-#include "modules/prediction/predictor/predictor.h"
+#include "Eigen/Dense"
+
 #include "modules/prediction/proto/lane_graph.pb.h"
+
+#include "modules/prediction/predictor/predictor.h"
 
 namespace apollo {
 namespace prediction {
@@ -65,14 +69,8 @@ class SequencePredictor : public Predictor {
    * @param Current lane id
    * @param Vector of boolean indicating if a lane sequence is disqualified
    */
-  void FilterLaneSequences(const LaneGraph& lane_graph,
-                           const std::string& lane_id,
+  void FilterLaneSequences(const Feature& feature, const std::string& lane_id,
                            std::vector<bool>* enable_lane_sequence);
-
-  /**
-   * @brief Get ADC status
-   */
-  void GetADC();
 
   /**
    * @brief Get lane change type
@@ -89,14 +87,6 @@ class SequencePredictor : public Predictor {
    * @return Lane change distance with ADC
    */
   double GetLaneChangeDistanceWithADC(const LaneSequence& lane_sequence);
-
-  /**
-   * @brief Check if the given lane id and s is on the same lane sequence as ADC
-   * @param Lane ID
-   * @param Lane s
-   * @return If the given lane id and s is on the same lane sequence as ADC
-   */
-  bool SameLaneSequence(const std::string& lane_id, double lane_s);
 
   /**
    * @brief Clear private members
@@ -133,11 +123,6 @@ class SequencePredictor : public Predictor {
    */
   bool LaneChangeWithMaxProb(const LaneChangeType& type,
                              const double& probability, const double& max_prob);
-
- protected:
-  std::string adc_lane_id_ = "";
-  double adc_lane_s_ = 0.0;
-  Eigen::Vector2d adc_position_;
 };
 
 }  // namespace prediction

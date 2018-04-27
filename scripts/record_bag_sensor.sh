@@ -22,32 +22,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${DIR}/apollo_base.sh"
 
 function start() {
-  BAG_DIR="${APOLLO_ROOT_DIR}/data/bag"
-
-  # Record bag to the largest portable-disk.
-  if [ "$1" = "--portable-disk" ]; then
-    LARGEST_DISK="$(df | grep "/media/${DOCKER_USER}" | sort -nr -k 4 | \
-        awk '{print substr($0, index($0, $6))}')"
-    if [ ! -z "${LARGEST_DISK}" ]; then
-      REAL_BAG_DIR="${LARGEST_DISK}/data/bag"
-      if [ ! -d "${REAL_BAG_DIR}" ]; then
-        mkdir -p "${REAL_BAG_DIR}"
-      fi
-      BAG_DIR="${APOLLO_ROOT_DIR}/data/bag/portable"
-      rm -fr "${BAG_DIR}"
-      ln -s "${REAL_BAG_DIR}" "${BAG_DIR}"
-    else
-      echo "Cannot find portable disk."
-      echo "Please make sure your container was started AFTER inserting the disk."
-    fi
-  fi
-
-  # Create and enter into bag dir.
-  if [ ! -e "${BAG_DIR}" ]; then
-    mkdir -p "${BAG_DIR}"
-  fi
-  cd "${BAG_DIR}"
-  echo "Recording bag to: $(pwd)"
+  decide_task_dir $@
+  cd "${TASK_DIR}"
 
   # Start recording.
   LOG="/tmp/apollo_record.out"
@@ -62,6 +38,7 @@ function start() {
         /apollo/sensor/gnss/corrected_imu \
         /apollo/sensor/gnss/gnss_status \
         /apollo/sensor/gnss/imu \
+        /apollo/sensor/gnss/raw_data \
         /apollo/sensor/gnss/ins_stat \
         /apollo/sensor/gnss/odometry \
         /apollo/sensor/gnss/rtk_eph \

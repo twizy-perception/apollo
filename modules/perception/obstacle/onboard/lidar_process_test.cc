@@ -25,8 +25,8 @@
 #include "modules/common/adapters/adapter_manager.h"
 #include "modules/common/configs/config_gflags.h"
 #include "modules/common/log.h"
+#include "modules/perception/common/pcl_types.h"
 #include "modules/perception/common/perception_gflags.h"
-#include "modules/perception/lib/pcl_util/pcl_types.h"
 #include "modules/perception/obstacle/lidar/dummy/dummy_algorithms.h"
 
 namespace apollo {
@@ -107,7 +107,7 @@ TEST_F(LidarProcessTest, test_Process) {
     pt.y = org_cloud->points[i].y;
     pt.z = org_cloud->points[i].z;
     pt.intensity = org_cloud->points[i].intensity;
-    if (isnan(org_cloud->points[i].x)) continue;
+    if (std::isnan(org_cloud->points[i].x)) continue;
     point_cloud->push_back(pt);
   }
   std::shared_ptr<Matrix4d> velodyne_trans = std::make_shared<Matrix4d>();
@@ -119,12 +119,12 @@ TEST_F(LidarProcessTest, test_Process) {
 TEST_F(LidarProcessTest, test_GeneratePbMsg) {
   double timestamp = 1234.567;
   lidar_process_.timestamp_ = timestamp;
-  vector<ObjectPtr> objs;
-  ObjectPtr obj1 = std::make_shared<Object>();
-  obj1->type = VEHICLE;
+  vector<std::shared_ptr<Object>> objs;
+  std::shared_ptr<Object> obj1 = std::make_shared<Object>();
+  obj1->type = ObjectType::VEHICLE;
   objs.push_back(obj1);
-  ObjectPtr obj2 = std::make_shared<Object>();
-  obj2->type = PEDESTRIAN;
+  std::shared_ptr<Object> obj2 = std::make_shared<Object>();
+  obj2->type = ObjectType::PEDESTRIAN;
   objs.push_back(obj2);
   lidar_process_.objects_ = objs;
 

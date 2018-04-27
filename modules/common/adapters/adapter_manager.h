@@ -64,6 +64,13 @@ namespace adapter {
   static AdapterConfig &Get##name##Config() {                                  \
     return instance()->name##config_;                                          \
   }                                                                            \
+  static void Feed##name##Data(const name##Adapter::DataType &data) {          \
+    if (!instance()->name##_) {                                                \
+      AERROR << "Initialize adapter before feeding protobuf";                  \
+      return;                                                                  \
+    }                                                                          \
+    Get##name()->FeedData(data);                                               \
+  }                                                                            \
   static bool Feed##name##File(const std::string &proto_file) {                \
     if (!instance()->name##_) {                                                \
       AERROR << "Initialize adapter before feeding protobuf";                  \
@@ -113,7 +120,7 @@ namespace adapter {
     if (config.mode() != AdapterConfig::PUBLISH_ONLY && IsRos()) {             \
       name##subscriber_ =                                                      \
           node_handle_->subscribe(topic_name, config.message_history_limit(),  \
-                                  &name##Adapter::OnReceive, name##_.get());   \
+                                  &name##Adapter::RosCallback, name##_.get()); \
     }                                                                          \
     if (config.mode() != AdapterConfig::RECEIVE_ONLY && IsRos()) {             \
       name##publisher_ = node_handle_->advertise<name##Adapter::DataType>(     \
@@ -247,6 +254,7 @@ class AdapterManager {
   REGISTER_ADAPTER(PerceptionObstacles);
   REGISTER_ADAPTER(Planning);
   REGISTER_ADAPTER(PointCloud);
+  REGISTER_ADAPTER(ImageFront);
   REGISTER_ADAPTER(ImageShort);
   REGISTER_ADAPTER(ImageLong);
   REGISTER_ADAPTER(Prediction);
@@ -262,6 +270,7 @@ class AdapterManager {
   REGISTER_ADAPTER(Mobileye);
   REGISTER_ADAPTER(DelphiESR);
   REGISTER_ADAPTER(ContiRadar);
+  REGISTER_ADAPTER(Ultrasonic);
   REGISTER_ADAPTER(CompressedImage);
   REGISTER_ADAPTER(GnssRtkObs);
   REGISTER_ADAPTER(GnssRtkEph);
@@ -270,6 +279,18 @@ class AdapterManager {
   REGISTER_ADAPTER(LocalizationMsfLidar);
   REGISTER_ADAPTER(LocalizationMsfSinsPva);
   REGISTER_ADAPTER(LocalizationMsfStatus);
+  REGISTER_ADAPTER(DriveEvent);
+  REGISTER_ADAPTER(RelativeMap);
+  REGISTER_ADAPTER(Navigation);
+  REGISTER_ADAPTER(VoiceDetectionRequest);
+  REGISTER_ADAPTER(VoiceDetectionResponse);
+  // for pandora
+  REGISTER_ADAPTER(PandoraPointCloud);
+  REGISTER_ADAPTER(PandoraCameraFrontColor);
+  REGISTER_ADAPTER(PandoraCameraRightGray);
+  REGISTER_ADAPTER(PandoraCameraLeftGray);
+  REGISTER_ADAPTER(PandoraCameraFrontGray);
+  REGISTER_ADAPTER(PandoraCameraBackGray);
 
   DECLARE_SINGLETON(AdapterManager);
 };

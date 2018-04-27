@@ -53,29 +53,22 @@ class DpStGraph {
  private:
   apollo::common::Status InitCostTable();
 
-  void CalculatePointwiseCost(const std::vector<const StBoundary*>& boundaries);
-
-  apollo::common::Status RetrieveSpeedProfile(
-      SpeedData* const speed_data) const;
+  apollo::common::Status RetrieveSpeedProfile(SpeedData* const speed_data);
 
   apollo::common::Status CalculateTotalCost();
   void CalculateCostAt(const uint32_t r, const uint32_t c);
 
   double CalculateEdgeCost(const STPoint& first, const STPoint& second,
                            const STPoint& third, const STPoint& forth,
-                           const double speed_limit) const;
+                           const double speed_limit);
   double CalculateEdgeCostForSecondCol(const uint32_t row,
-                                       const double speed_limit) const;
+                                       const double speed_limit);
   double CalculateEdgeCostForThirdCol(const uint32_t curr_r,
                                       const uint32_t pre_r,
-                                      const double speed_limit) const;
+                                      const double speed_limit);
 
-  bool CalculateFeasibleAccelRange(const double r_pre, const double r_cur,
-                                   uint32_t* const lower_bound,
-                                   uint32_t* const upper_bound) const;
-
-  void GetRowRange(const StGraphPoint& point, uint32_t* highest_row,
-                   uint32_t* lowest_row);
+  void GetRowRange(const StGraphPoint& point, int* highest_row,
+                   int* lowest_row);
 
  private:
   const StGraphData& st_graph_data_;

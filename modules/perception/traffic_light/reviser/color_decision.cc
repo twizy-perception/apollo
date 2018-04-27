@@ -26,13 +26,13 @@ namespace traffic_light {
 std::string ColorReviser::name() const { return "ColorReviser"; }
 bool ColorReviser::Init() {
   ConfigManager *config_manager = ConfigManager::instance();
-  if (config_manager == NULL) {
+  if (config_manager == nullptr) {
     AERROR << "failed to get ConfigManager instance.";
     return false;
   }
 
-  const ModelConfig *model_config = NULL;
-  if (!config_manager->GetModelConfig(name(), &model_config)) {
+  const ModelConfig *model_config = config_manager->GetModelConfig(name());
+  if (model_config == nullptr) {
     AERROR << "not found model config: " << name();
     return false;
   }
@@ -58,7 +58,7 @@ bool ColorReviser::Revise(const ReviseOption &option,
 
   for (size_t i = 0; i < lights_ref.size(); ++i) {
     std::string id = lights_ref[i]->info.id().id();
-    std::cout << "light " << i << " id: " << id << std::endl;
+    ADEBUG << "light " << i << " id: " << id << std::endl;
     switch (lights_ref[i]->status.color) {
       default:
       case BLACK:

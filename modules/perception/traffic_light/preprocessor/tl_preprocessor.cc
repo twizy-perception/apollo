@@ -16,7 +16,7 @@
 
 #include "modules/perception/traffic_light/preprocessor/tl_preprocessor.h"
 
-#include "modules/perception/lib/base/time_util.h"
+#include "modules/common/time/time_util.h"
 #include "modules/perception/onboard/transform_input.h"
 #include "modules/perception/traffic_light/base/tl_shared_data.h"
 #include "modules/perception/traffic_light/base/utils.h"
@@ -25,10 +25,12 @@ namespace apollo {
 namespace perception {
 namespace traffic_light {
 
+using apollo::common::time::TimeUtil;
+
 bool TLPreprocessor::Init() {
   ConfigManager *config_manager = ConfigManager::instance();
-  const ModelConfig *model_config = NULL;
-  if (!config_manager->GetModelConfig(name(), &model_config)) {
+  const ModelConfig *model_config = config_manager->GetModelConfig(name());
+  if (model_config == nullptr) {
     AERROR << "not found model: " << name();
     return false;
   }
@@ -268,6 +270,7 @@ bool TLPreprocessor::SyncImage(const ImageSharedPtr &image,
       *should_pub = true;
       (*image_lights).reset(new ImageLights);
       (*image_lights)->image = image;
+      (*image_lights)->camera_id = image->camera_id();
       (*image_lights)->timestamp = image_ts;
       (*image_lights)->diff_image_sys_ts = diff_image_sys_ts;
       (*image_lights)->diff_image_pose_ts = diff_image_pose_ts;
