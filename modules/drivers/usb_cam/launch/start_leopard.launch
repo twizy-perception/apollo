@@ -8,7 +8,7 @@
 
     <node pkg="nodelet" type="nodelet" name="sensor_camera_traffic_long" output="screen"
           args="load usb_cam/UsbCamNodelet camera_nodelet_manager" respawn="true" >
-      <param name="video_device" value="/dev/camera/trafficlights" />
+      <param name="video_device" value="/dev/video1" />
     	<param name="image_width" value="1920" />
     	<param name="image_height" value="1080" />
     	<param name="pixel_format" value="yuyv" />
@@ -28,7 +28,7 @@
 
     <node pkg="nodelet" type="nodelet" name="sensor_camera_traffic_short" output="screen"
           args="load usb_cam/UsbCamNodelet camera_nodelet_manager" respawn="true" >
-      <param name="video_device" value="/dev/camera/obstacle" />
+      <param name="video_device" value="/dev/video0" />
     	<param name="image_width" value="1920" />
     	<param name="image_height" value="1080" />
     	<param name="pixel_format" value="yuyv" />
@@ -42,5 +42,4 @@
       <remap from="/apollo/sensor/camera/traffic/camera_info" to="$(arg traffic_short_topic_name)/camera_info" />
     </node>
   </group>
-
 </launch>
