@@ -129,7 +129,7 @@ for map_name in ${DEFAULT_MAPS[@]}; do
     source ${APOLLO_ROOT_DIR}/docker/scripts/restart_map_volume.sh ${map_name} "${VOLUME_VERSION}"
 done
 
-#IMG=${DOCKER_REPO}:$VERSION
+IMG=${DOCKER_REPO}:$VERSION
 IMG="twizy/apollo"
 
 function local_volumes() {

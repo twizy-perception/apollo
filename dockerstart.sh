@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-bash /home/twizy1/apollo/docker/scripts/dev_start.sh
+bash /home/twizy1/apollo/docker/scripts/dev_start.sh -l
