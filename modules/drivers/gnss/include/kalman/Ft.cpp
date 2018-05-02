@@ -4,15 +4,14 @@
 // government, commercial, or other organizational use.
 // File: Ft.cpp
 //
-// MATLAB Coder version            : 3.3
-// C/C++ source code generated on  : 10-Apr-2018 14:45:54
+// MATLAB Coder version            : 4.0
+// C/C++ source code generated on  : 27-Apr-2018 11:56:12
 //
 
 // Include Files
+#include <cmath>
+#include <string.h>
 #include "rt_nonfinite.h"
-#include "messure_update.h"
-#include "messure_update_g.h"
-#include "q2euler.h"
 #include "time_update.h"
 #include "Ft.h"
 
@@ -46,7 +45,7 @@ void Ft(double T, const double acc[3], const double gyr[3], const double q[4],
   double t40;
   double t44;
   double dv0[64];
-  int i1;
+  int i0;
 
   // FT
   //     F = FT(T,AY,GX,GY,GZ,Q0,Q1,Q2,Q3,V)
@@ -124,8 +123,8 @@ void Ft(double T, const double acc[3], const double gyr[3], const double q[4],
   dv0[61] = T * gyr[1] * t39 * t40 * -0.5;
   dv0[62] = t38;
   dv0[63] = t41;
-  for (i1 = 0; i1 < 8; i1++) {
-    memcpy(&F[i1 << 3], &dv0[i1 << 3], sizeof(double) << 3);
+  for (i0 = 0; i0 < 8; i0++) {
+    memcpy(&F[i0 << 3], &dv0[i0 << 3], sizeof(double) << 3);
   }
 }
 

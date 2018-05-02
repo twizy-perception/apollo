@@ -4,15 +4,13 @@
 // government, commercial, or other organizational use.
 // File: norm.cpp
 //
-// MATLAB Coder version            : 3.3
-// C/C++ source code generated on  : 10-Apr-2018 14:45:54
+// MATLAB Coder version            : 4.0
+// C/C++ source code generated on  : 27-Apr-2018 11:56:12
 //
 
 // Include Files
+#include <cmath>
 #include "rt_nonfinite.h"
-#include "messure_update.h"
-#include "messure_update_g.h"
-#include "q2euler.h"
 #include "time_update.h"
 #include "norm.h"
 
@@ -22,7 +20,7 @@
 // Arguments    : const double x[3]
 // Return Type  : double
 //
-double genpnorm(const double x[3])
+double norm(const double x[3])
 {
   double y;
   double scale;
@@ -30,7 +28,7 @@ double genpnorm(const double x[3])
   double absxk;
   double t;
   y = 0.0;
-  scale = 2.2250738585072014E-308;
+  scale = 3.3121686421112381E-170;
   for (k = 0; k < 3; k++) {
     absxk = std::abs(x[k]);
     if (absxk > scale) {

@@ -4,23 +4,17 @@
 // government, commercial, or other organizational use.
 // File: time_update.h
 //
-// MATLAB Coder version            : 3.3
-// C/C++ source code generated on  : 10-Apr-2018 14:45:54
+// MATLAB Coder version            : 4.0
+// C/C++ source code generated on  : 27-Apr-2018 11:56:12
 //
 #ifndef TIME_UPDATE_H
 #define TIME_UPDATE_H
 
 // Include Files
-#include <cmath>
-#include <float.h>
-#include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <string.h>
-#include "rt_defines.h"
-#include "rt_nonfinite.h"
 #include "rtwtypes.h"
-#include "messure_update_types.h"
+#include "time_update_types.h"
 
 // Function Declarations
 extern void time_update(double x[8], double P[64], double T, const double gyr[3],

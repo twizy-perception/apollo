@@ -53,13 +53,15 @@ FILE(GLOB GNSS_PROTO_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/proto/*.pb.cc")
 
 add_library(sbp third_party/sbp.c third_party/edc.c)
 
-add_library(kalman include/kalman/atan2.cpp include/kalman/Ft.cpp include/kalman/messure_update.cpp include/kalman/messure_update_g.cpp
+add_library(kalman include/kalman/atan2.cpp include/kalman/Ft.cpp include/kalman/Gt.cpp include/kalman/messure_update.cpp include/kalman/messure_update_g.cpp
     include/kalman/messure_update_initialize.cpp include/kalman/messure_update_terminate.cpp include/kalman/mu_normalizeQ.cpp include/kalman/norm.cpp
-     include/kalman/power.cpp include/kalman/q2e.cpp include/kalman/q2e_initialize.cpp include/kalman/q2e_terminate.cpp include/kalman/Qq.cpp include/kalman/rtGetInf.cpp include/kalman/rtGetNaN.cpp 
-     include/kalman/rt_nonfinite.cpp include/kalman/time_update.cpp include/kalman/ll2utm_initialize.cpp include/kalman/ll2utm_terminate.cpp
+     include/kalman/power.cpp include/kalman/q2e.cpp include/kalman/q2e_initialize.cpp include/kalman/q2e_terminate.cpp include/kalman/Qq.cpp 
+     include/kalman/rtGetInf.cpp include/kalman/rtGetNaN.cpp include/kalman/rt_nonfinite.cpp include/kalman/time_update.cpp 
+     include/kalman/ll2utm_initialize.cpp include/kalman/ll2utm_terminate.cpp
       include/kalman/ll2utm_c.cpp include/kalman/utm2ll_c.cpp include/kalman/ll2utm_c_rtwutil.cpp include/kalman/rt_nonfinite.cpp
-      include/kalman/ll2utm_c_initialize.cpp include/kalman/messure_update_g_initialize.cpp include/kalman/ll2utm_c_terminate.cpp include/kalman/messure_update_g_terminate.cpp
-      include/kalman/P2EulerCov.cpp include/kalman/P2EulerCov_initialize.cpp include/kalman/P2EulerCov_terminate.cpp)
+      include/kalman/ll2utm_c_initialize.cpp include/kalman/messure_update_g_initialize.cpp include/kalman/ll2utm_c_terminate.cpp 
+      include/kalman/messure_update_g_terminate.cpp include/kalman/P2EulerCov.cpp include/kalman/P2EulerCov_initialize.cpp 
+      include/kalman/P2EulerCov_terminate.cpp include/kalman/sign.cpp include/kalman/sqrt.cpp)
 
 add_library(rtcm third_party/rtcm3.c third_party/rtcm.c third_party/rtkcmn.c third_party/novatel.c third_party/rcvraw.c)
 target_link_libraries(rtcm m)
