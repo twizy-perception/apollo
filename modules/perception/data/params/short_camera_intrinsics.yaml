@@ -1,21 +1,21 @@
 header: 
-  seq: 0
-  stamp: 
-    secs: 0
-    nsecs:         0
-  frame_id: ''
-height: 1080
-width: 1920
-distortion_model: plumb_bob
-D: [-0.562958, 0.323184, -0.001498, 0.03492, 0.0]
-K: [2028.79502, 0.0, 959.5, 0.0, 2035.305155, 539.5, 0.0, 0.0, 1.0]
-R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
-P: [1685.548583984375, 0.0, 955.0389019755967, 0.0, 0.0, 1877.2034912109375, 491.75418425749376, 0.0, 0.0, 0.0, 1.0, 0.0]
-binning_x: 0
-binning_y: 0
-roi: 
-  x_offset: 0
-  y_offset: 0
-  height: 0
-  width: 0
-  do_rectify: False
+      seq: 0
+      stamp: 
+      secs: 0
+        nsecs: 0
+      frame_id: short_camera
+    height: 1088
+    width: 1928
+    distortion_model: plumb_bob
+    D: [-0.148380129502757, -0.928939099880979, 0, 0, 1.78984284238651] # k1, k2, t1, t2, k3. k = radial distortion parameters, t = tangential dist. param.
+    K: [2114.48482490014, 0, 1040.67157701276, 0, 2115.39530532843, 252.292604859398, 0, 0, 1] # Intrinsic camera_matrix
+    R: [1,0,0,0,1,0,0,0,1] # identity matrix for monocular cameras
+    P: [-1756.43145889868, -214.059535238478, 535.061218942817, 753013.768458442, -5.73613797839830, -1732.37623340368, 75.2185634048832, 403883.763947571, -0.140619151583573, -0.256831589885050, 0.956171422206831, 687.876544852328] # projection matrix?
+    binning_x: 0
+    binning_y: 0
+    roi: 
+      x_offset: 0
+      y_offset: 0
+      height: 0
+      width: 0
+      do_rectify: False
