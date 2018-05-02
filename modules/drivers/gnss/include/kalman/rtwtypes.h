@@ -4,14 +4,15 @@
  * government, commercial, or other organizational use.
  * File: rtwtypes.h
  *
- * MATLAB Coder version            : 3.3
- * C/C++ source code generated on  : 10-Apr-2018 14:45:54
+ * MATLAB Coder version            : 4.0
+ * C/C++ source code generated on  : 27-Apr-2018 11:56:12
  */
 
 #ifndef RTWTYPES_H
 #define RTWTYPES_H
-#ifndef __TMWTYPES__
-#define __TMWTYPES__
+#if !defined(__cplusplus)
+#include <stdbool.h>
+#endif
 
 /*=======================================================================*
  * Target hardware information
@@ -47,7 +48,7 @@ typedef double real64_T;
  *===========================================================================*/
 typedef double real_T;
 typedef double time_T;
-typedef unsigned char boolean_T;
+typedef bool boolean_T;
 typedef int int_T;
 typedef unsigned int uint_T;
 typedef unsigned long ulong_T;
@@ -137,7 +138,7 @@ typedef struct {
 #define MIN_uint64_T                   ((uint64_T)(0UL))
 
 /* Logical type definitions */
-#if !defined(__cplusplus) && !defined(__true_false_are_keywords)
+#if !defined(__cplusplus) && !defined(__true_false_are_keywords) && !defined(__bool_true_false_are_defined)
 #  ifndef false
 #   define false                       (0U)
 #  endif
@@ -153,7 +154,6 @@ typedef struct {
  * rt_logging.c and rt_matrx.c.
  */
 #define TMW_NAME_LENGTH_MAX            64
-#endif
 #endif
 
 /*

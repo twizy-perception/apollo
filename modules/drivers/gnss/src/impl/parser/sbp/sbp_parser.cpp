@@ -543,6 +543,28 @@ bool imu_imu_raw(msg_imu_raw_t* data){
 bool imu_ins(msg_imu_raw_t* data){
 	//current_message = Parser::MessageType::INS;
 
+	// the car is assumed to move only forward and not in reverse.
+	// The EKF sometimes turns the car around and moves it in reverse.
+	// Therefore, if the speed is negative, turn the car around.
+
+	if(xStateVector[3] < -0.5){
+		// Rotade quaternion 180 deg around z-axis (or multiply with q=[0 0 0 1]')
+		double w = xStateVector[4];
+		double x = xStateVector[5];
+		double y = xStateVector[6];
+		double z = xStateVector[7];
+
+		xStateVector[4] = -z;
+		xStateVector[5] = y;
+		xStateVector[6] = -x;
+		xStateVector[7] = w;
+
+		// Make speed positive
+		xStateVector[3] = -xStateVector[3];
+
+		ROS_WARN_STREAM('Turned car around.');
+	}
+
 	double gpstime = getGPSTime(data->tow);
 	if((gpstime - _ins.measurement_time()) < 1e-3) // Don't accept any messages older than our current
 		return false;
@@ -557,13 +579,15 @@ bool imu_ins(msg_imu_raw_t* data){
 	// Do the Kalman dance
 
 	// Switched x and y aacording to IMU orientation.
-	double Ra[9] = {(1.0e-5)*0.0802, 0,0,
-			0,(1.0e-5)*0.0654, 0,
-			0, 0, (1.0e-5)*0.1236};
+	// covariance maatrix for acceleromter
+	const double Ra[9] = {(1.0e-5)*0.0802, 0,0,
+					0,(1.0e-5)*0.0654, 0,
+					0, 0, (1.0e-5)*0.1236};
 
-	double Rw[9] = {(1.0e-6)*0.4305, 0, 0,
-			0, (1.0e-6)*0.3410, 0,
-			0, 0, (1.0e-6)*0.3449};
+	// covariance matrix for gyro
+	const double Rw[9] = {(1.0e-6)*0.4305, 0, 0,
+					0, (1.0e-6)*0.3410, 0,
+					0, 0, (1.0e-6)*0.3449};
 
 
 	// Cordinate transformation accoriding to IMU orientation in car.
@@ -612,7 +636,7 @@ bool imu_ins(msg_imu_raw_t* data){
 	_ins.mutable_position()->set_height(xStateVector[2]);
 
  	// Euler angles with intrinsic rotation sequence ZYX
-	_ins.mutable_euler_angles()->set_z(euler[0]);
+	_ins.mutable_euler_angles()->set_z(euler[0] + 3.141596/2.0); // May be 90 degrees off.	
 	_ins.mutable_euler_angles()->set_y(euler[1]);
 	_ins.mutable_euler_angles()->set_x(euler[2]);
 
@@ -662,7 +686,7 @@ bool imu_ins(msg_imu_raw_t* data){
 		_ins.set_euler_angles_covariance(i, eulCov[i]);
 	}
 
-	// TODO: Fix these covar matrixes
+	// TODO: Fix these covariance matrixes
 	for (int i = 0; i < 9; i += 4) {
 		_ins.set_linear_velocity_covariance(i, pCovVector[27]);
 	}
@@ -671,7 +695,7 @@ bool imu_ins(msg_imu_raw_t* data){
 
 	// TODO: Fix INS-status
 
-	if( (xStateVector[3] > 10) || (xStateVector[3] < -10 ) || (xStateVector[2]>120) || (xStateVector[2]<90)){
+	if( (xStateVector[3] > 10) || (xStateVector[3] < -10 )){
 		_ins.set_type(apollo::drivers::gnss::Ins::INVALID);
 	}
 	else {
@@ -682,7 +706,7 @@ bool imu_ins(msg_imu_raw_t* data){
 
 
 	ROS_WARN_STREAM("Euler: " << " Z:" << euler[0] << " Y:" << euler[1] << " X:" << euler[2]);
-	ROS_WARN_STREAM("Pos: " << " lon: " << longitude << ", lat: " << latitude << ", height: " << xStateVector[2] << "vel: " << xStateVector[3]);
+	ROS_WARN_STREAM("Pos: " << " lon: " << longitude << ", lat: " << latitude << ", height: " << xStateVector[2] << ". Speed: " << xStateVector[3]);
 
 
 	return true;

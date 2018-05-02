@@ -4,26 +4,20 @@
 // government, commercial, or other organizational use.
 // File: norm.h
 //
-// MATLAB Coder version            : 3.3
-// C/C++ source code generated on  : 10-Apr-2018 14:45:54
+// MATLAB Coder version            : 4.0
+// C/C++ source code generated on  : 27-Apr-2018 11:56:12
 //
 #ifndef NORM_H
 #define NORM_H
 
 // Include Files
-#include <cmath>
-#include <float.h>
-#include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <string.h>
-#include "rt_defines.h"
-#include "rt_nonfinite.h"
 #include "rtwtypes.h"
-#include "messure_update_types.h"
+#include "time_update_types.h"
 
 // Function Declarations
-extern double genpnorm(const double x[3]);
+extern double norm(const double x[3]);
 
 #endif
 
