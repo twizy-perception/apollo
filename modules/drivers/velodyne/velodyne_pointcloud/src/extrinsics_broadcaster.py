@@ -38,13 +38,12 @@ def main():
     file_path = open(sys.argv[1])
     transform_stamped = yaml.safe_load(file_path)
     command = 'rosrun tf static_transform_publisher '\
-        '%f %f %f %f %f %f %f %s %s 100' % (transform_stamped['transform']['translation']['x'],
+        '%f %f %f %f %f %f %s %s 100' % (transform_stamped['transform']['translation']['x'],
                                         transform_stamped['transform']['translation']['y'],
                                         transform_stamped['transform']['translation']['z'],
-                                        transform_stamped['transform']['rotation']['x'],
                                         transform_stamped['transform']['rotation']['y'],
-                                        transform_stamped['transform']['rotation']['z'],
-                                        transform_stamped['transform']['rotation']['w'],
+                                        transform_stamped['transform']['rotation']['p'],
+                                        transform_stamped['transform']['rotation']['r'],
                                         transform_stamped['header']['frame_id'],
                                         transform_stamped['child_frame_id'])
 
