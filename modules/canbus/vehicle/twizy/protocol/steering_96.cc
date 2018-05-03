@@ -57,7 +57,7 @@ Steering96 *Steering96::set_steering_angle_speed(double angle_speed) {
 
 // positive for left, negative for right
 void Steering96::set_steering_angle_p(uint8_t *data, double angle) {
-  angle = ProtocolData::BoundedValue(-40.0, 40.0, angle);
+  angle = ProtocolData::BoundedValue(-39.5, 39.5, angle);
   
   Byte frame_high(data + 1);
   //  Left turn is positive(+) and right turn is negative(-). write 255 for -, 0 for +.
@@ -68,7 +68,7 @@ void Steering96::set_steering_angle_p(uint8_t *data, double angle) {
     frame_high.set_value(0x00);   
   }
 
-  char a = (char)((angle / 40.0) * 255);
+  char a = (char)((angle / 39.5) * 255);
   
   Byte frame_low(data + 0);
   frame_low.set_value(a, 0, 8);
