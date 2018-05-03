@@ -98,6 +98,7 @@ class Canbus : public apollo::common::ApolloApp {
   CanReceiver<::apollo::canbus::ChassisDetail> can_receiver_;
   std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>
       message_manager_;
+ 
   std::unique_ptr<VehicleController> vehicle_controller_;
 
   int64_t last_timestamp_ = 0;

@@ -14,35 +14,25 @@
  * limitations under the License.
  *****************************************************************************/
 
-#include "modules/canbus/vehicle/vehicle_factory.h"
-#include "modules/canbus/proto/vehicle_parameter.pb.h"
-#include "modules/canbus/vehicle/lincoln/lincoln_vehicle_factory.h"
 #include "modules/canbus/vehicle/twizy/twizy_vehicle_factory.h"
+
+#include "modules/canbus/vehicle/twizy/twizy_controller.h"
+#include "modules/canbus/vehicle/twizy/twizy_message_manager.h"
+#include "modules/common/log.h"
+#include "modules/common/util/util.h"
 
 namespace apollo {
 namespace canbus {
 
-void VehicleFactory::RegisterVehicleFactory() {
-  Register(VehicleParameter::LINCOLN_MKZ, []() -> AbstractVehicleFactory * {
-    return new LincolnVehicleFactory();
-  });
-
-  // register the new vehicle here.
-  Register(VehicleParameter::RENAULT_TWIZY, []() -> AbstractVehicleFactory* {
-    return new TwizyVehicleFactory();
-  });
+std::unique_ptr<VehicleController>
+TwizyVehicleFactory::CreateVehicleController() {
+  return std::unique_ptr<VehicleController>(new twizy::TwizyController());
 }
 
-std::unique_ptr<AbstractVehicleFactory> VehicleFactory::CreateVehicle(
-    const VehicleParameter &vehicle_parameter) {
-  auto abstract_factory = CreateObject(vehicle_parameter.brand());
-  if (!abstract_factory) {
-    AERROR << "failed to create vehicle factory with "
-           << vehicle_parameter.DebugString();
-  } else {
-    abstract_factory->SetVehicleParameter(vehicle_parameter);
-  }
-  return abstract_factory;
+std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>
+TwizyVehicleFactory::CreateMessageManager() {
+  return std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>(
+	  new twizy::TwizyMessageManager());
 }
 
 }  // namespace canbus

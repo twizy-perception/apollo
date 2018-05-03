@@ -14,6 +14,7 @@ proto_library(
         "chassis.proto",
         "chassis_detail.proto",
         "vehicle_parameter.proto",
+	"twizy.proto",
     ],
     deps = [
         "//modules/common/proto:common_proto_lib",

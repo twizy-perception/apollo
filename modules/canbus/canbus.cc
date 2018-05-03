@@ -143,7 +143,9 @@ Status Canbus::Start() {
 void Canbus::PublishChassis() {
   Chassis chassis = vehicle_controller_->chassis();
   AdapterManager::FillChassisHeader(FLAGS_canbus_node_name, &chassis);
-
+  
+  chassis.set_driving_mode(Chassis::COMPLETE_AUTO_DRIVE);
+  
   AdapterManager::PublishChassis(chassis);
   ADEBUG << chassis.ShortDebugString();
 }
@@ -173,6 +175,7 @@ void Canbus::Stop() {
 }
 
 void Canbus::OnControlCommand(const ControlCommand &control_command) {
+  
   int64_t current_timestamp =
       apollo::common::time::AsInt64<common::time::micros>(Clock::Now());
   // if command coming too soon, just ignore it.

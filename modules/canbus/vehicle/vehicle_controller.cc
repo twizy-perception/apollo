@@ -101,7 +101,7 @@ ErrorCode VehicleController::Update(const ControlCommand &command) {
   control_command.CopyFrom(command);
 
   // execute action to tranform driving mode
-  if (control_command.has_pad_msg() && control_command.pad_msg().has_action()) {
+/*  if (control_command.has_pad_msg() && control_command.pad_msg().has_action()) {
     AINFO << "Canbus received pad msg:"
           << control_command.pad_msg().ShortDebugString();
     Chassis::DrivingMode mode = Chassis::COMPLETE_MANUAL;
@@ -122,9 +122,12 @@ ErrorCode VehicleController::Update(const ControlCommand &command) {
     }
     SetDrivingMode(mode);
   }
+  */
+  /*SetDrivingMode(Chassis::COMPLETE_AUTO_DRIVE);
 
   if (driving_mode_ == Chassis::COMPLETE_AUTO_DRIVE ||
       driving_mode_ == Chassis::AUTO_SPEED_ONLY) {
+    AINFO<< "Entered the right check";
     Gear(control_command.gear_location());
     Throttle(control_command.throttle());
     Brake(control_command.brake());
@@ -149,6 +152,21 @@ ErrorCode VehicleController::Update(const ControlCommand &command) {
     SetTurningSignal(control_command);
     SetBeam(control_command);
   }
+  */
+
+  /* OBS! Fulhack! vi sätter throttle till det som 
+  egentligen ska vara speed, för att slippa implementera 
+  egna funktioner i canbusmodulens vehicle controller.*/
+    //Throttle(control_command.throttle());
+    Throttle(control_command.debug().simple_lon_debug().speed_reference());
+    //Brake(control_command.brake());
+
+    const double steering_rate_threshold = 1.0;
+    if (control_command.steering_rate() > steering_rate_threshold) {
+      Steer(control_command.steering_target(), control_command.steering_rate());
+    } else {
+      Steer(control_command.steering_target());
+    }
 
   return ErrorCode::OK;
 }

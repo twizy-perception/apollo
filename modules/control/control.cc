@@ -131,7 +131,7 @@ void Control::OnMonitor(
 Status Control::ProduceControlCommand(ControlCommand *control_command) {
   Status status = CheckInput();
   // check data
-  if (!status.ok()) {
+  /*if (!status.ok()) {
     AERROR_EVERY(100) << "Control input data failed: "
                       << status.error_message();
     estop_ = true;
@@ -143,7 +143,7 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
       status = status_ts;
     }
   }
-
+*/
   // check estop
   estop_ = estop_ || trajectory_.estop().is_estop();
 
