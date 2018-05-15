@@ -54,7 +54,7 @@ void Speed9A::set_ref_speed_p(uint8_t *data, double speed) {
 
   Byte frame_low(data + 0);
   frame_low.set_value(s, 0, 8);
-  
+
   }
 
 
