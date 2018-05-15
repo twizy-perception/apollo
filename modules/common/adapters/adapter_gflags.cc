@@ -26,13 +26,15 @@ DEFINE_string(chassis_topic, "/apollo/canbus/chassis", "chassis topic name");
 DEFINE_string(chassis_detail_topic, "/apollo/canbus/chassis_detail",
               "chassis detail topic name");
 DEFINE_string(localization_topic, "/apollo/localization/pose",
-              "localization topic name"); 
+              "localization topic name");
 DEFINE_string(planning_trajectory_topic, "/apollo/planning",
               "planning trajectory topic name");
 DEFINE_string(monitor_topic, "/apollo/monitor", "ROS topic for monitor");
 DEFINE_string(pad_topic, "/apollo/control/pad",
               "control pad message topic name");
 DEFINE_string(control_command_topic, "/apollo/control",
+              "control command topic name");
+DEFINE_string(control_command_topic2, "/apollo/safety",
               "control command topic name");
 DEFINE_string(pointcloud_topic,
               "/apollo/sensor/velodyne16/compensator/PointCloud2",

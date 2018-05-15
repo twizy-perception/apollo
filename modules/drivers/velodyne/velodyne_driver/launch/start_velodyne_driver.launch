@@ -4,7 +4,7 @@
   <arg name="model" default="64E_S3D_STRONGEST" />
   <arg name="ip" default=""/>
   <arg name="firing_data_port" default=""/>
-  <arg name="rpm" default="600.0" />
+  <arg name="rpm" default="300.0" />
   <arg name="frame_id" default="velodyne16" />
   <arg name="topic" default="/apollo/sensor/velodyne16/VelodyneScanUnified" />
   <arg name="node_name" default="driver_nodelet"/>

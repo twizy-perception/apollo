@@ -48,21 +48,11 @@ Speed9A *Speed9A::set_ref_speed(double speed) {
 // private
 
 void Speed9A::set_ref_speed_p(uint8_t *data, double speed) {
-  speed = ProtocolData::BoundedValue(0.0, 10.0, speed);
-  
-  /*
-  Byte frame_high(data + 1);
-  //  Left turn is positive(+) and right turn is negative(-). write 255 for -, 0 for +.
-  if (angle < 0) {
-    frame_high.set_value(0xFF);
-    angle = -angle;
-  } else {
-    frame_high.set_value(0x00);   
-  }
-  */
-  char s = (char)((speed / 10.0) * 255);
-  
-  Byte frame_low(data + 5);
+  speed = ProtocolData::BoundedValue(0.0, 5.0, speed);
+
+  char s = (char)((speed / 5.0) * 255);
+
+  Byte frame_low(data + 0);
   frame_low.set_value(s, 0, 8);
   
   }

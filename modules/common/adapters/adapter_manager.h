@@ -270,6 +270,7 @@ class AdapterManager {
   REGISTER_ADAPTER(LocalizationMsfLidar);
   REGISTER_ADAPTER(LocalizationMsfSinsPva);
   REGISTER_ADAPTER(LocalizationMsfStatus);
+  REGISTER_ADAPTER(ControlCommand2);
 
   DECLARE_SINGLETON(AdapterManager);
 };

@@ -28,7 +28,6 @@ namespace twizy {
 TwizyMessageManager::TwizyMessageManager() {
   // Control Messages
   AddSendProtocolData<Steering96, true>();
-  AddSendProtocolData<Gear98, true>();
   AddSendProtocolData<Speed9A, true>();
   
   // Report Messages

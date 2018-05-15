@@ -38,19 +38,44 @@ void Currentspeed599::Parse(const std::uint8_t* bytes, int32_t length,
 
 // config detail: {'name': 'curr_speed', 'offset': 0.0, 'precision': 0.01, 'len': 16, 'is_signed_var': True, 'physical_range': '[0|0]', 'bit': 47, 'type': 'double', 'order': 'motorola', 'physical_unit': ''}
 double Currentspeed599::curr_speed(const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 5);
-  int32_t x = t0.get_byte(0, 8);
+    
+    unsigned short i = 0;
 
-  Byte t1(bytes + 6);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
+    unsigned char* t = (unsigned char*) &i;
 
-  x <<= 16;
-  x >>= 16;
+    *(t) = bytes[6];
+    *(t+1) = bytes[5];
 
-  double ret = x * 0.010000;
-  return ret;
+    unsigned long result = 0.0;
+
+    unsigned long temp = 0 | i;
+    const unsigned short signbit_mask = 0x8000;
+    temp = temp & signbit_mask;
+    result = (result | temp) << 48; //Shift up to signbit position
+
+    const unsigned short exponent_mask = 0x7C00;
+    temp = i & exponent_mask;
+    //Shift down and cast to signed to be able to do the math required to fix the bias
+    //and then shift up again to be bitwise ore:d back into the result
+    //16-bit bias is 15, 64 bit is 1023, so add the difference (1008) to compensate
+    const int bias_difference = 1023 - 15;
+    //Uncomment the line below to test my wierd unscientific fuckery that makes the numbers line up
+    //const int bias_difference = 1025 - 15;
+    long exponent = ((temp >> 10) + bias_difference) << 52;
+    //Add the corrected exponent to the result
+    result = (result | exponent);
+
+    //Mask out the mantissa
+    const unsigned long mantissa_mask = 0x0FFFFFFFFFFFFF;
+    temp = i & mantissa_mask;
+    //Rightpad with zeroes
+    temp = temp << 42;
+
+    result = (result | temp);
+
+
+    double speed = *((double*) &result);
+    return speed;
 }
 }  // namespace twizy
 }  // namespace canbus

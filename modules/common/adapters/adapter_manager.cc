@@ -91,6 +91,7 @@ void AdapterManager::Init(const AdapterManagerConfig &configs) {
         break;
       case AdapterConfig::CONTROL_COMMAND:
         EnableControlCommand(FLAGS_control_command_topic, config);
+		EnableControlCommand2(FLAGS_control_command_topic2, config);
         break;
       case AdapterConfig::ROUTING_REQUEST:
         EnableRoutingRequest(FLAGS_routing_request_topic, config);

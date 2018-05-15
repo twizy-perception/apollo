@@ -1,4 +1,3 @@
-
 #include <cmath>
 #include <iostream>
 #include <iomanip>
@@ -105,9 +104,6 @@ double pCovVector[64];
 const int UTM_ZONE = 32;
 bool initPosSet = false;
 double timeSinceKalmanReset = 0;
-double last_lon = 0;
-double last_lat = 0;
-double last_height = 0;
 
 // Converts a SBP Fixmode to a Novatel Position/Velocity type
 u32 fix_mode_to_position_type(SBPFixMode fixmode){
@@ -476,7 +472,7 @@ void init_kalman(){
 	xStateVector[6] = 0;
 	xStateVector[7] = 0;
 
-	timeSinceKalmanReset = 0;
+	timeSinceKalamnReset = 0;
 	ROS_WARN_STREAM("Init Kalman successful");
 }
 
@@ -486,9 +482,6 @@ void update_kalman_gps(msg_pos_llh_t* data) {
  	double lon = data->lon;
  	double height = data->height;
 
-	last_lat = lat;
-	last_lon = lon;
-	last_height = height;
 
  	double Rp[9] = {(data->h_accuracy/1000.0)*(data->h_accuracy/1000.0), 0.0, 0.0,
 					0.0, (data->h_accuracy/1000.0)*(data->h_accuracy/1000.0), 0.0,
@@ -573,7 +566,7 @@ bool imu_ins(msg_imu_raw_t* data){
 		// Make speed positive
 		xStateVector[3] = -xStateVector[3];
 
-		ROS_WARN_STREAM("Turned car around.");
+		ROS_WARN_STREAM('Turned car around.');
 	}
 
 	double gpstime = getGPSTime(data->tow);
@@ -646,12 +639,12 @@ bool imu_ins(msg_imu_raw_t* data){
 	//_ins.mutable_position()->set_lat(latitude);
 	//_ins.mutable_position()->set_lon(longitude);
 	//_ins.mutable_position()->set_height(xStateVector[2]);
-        _ins.mutable_position()->set_lat(last_lat);
-        _ins.mutable_position()->set_lon(last_lon);
-        _ins.mutable_position()->set_height(last_height);
+        //_ins.mutable_position()->set_lat(latitude);
+        //_ins.mutable_position()->set_lon(longitude);
+        //_ins.mutable_position()->set_height(xStateVector[2]);
 
  	// Euler angles with intrinsic rotation sequence ZYX
-	_ins.mutable_euler_angles()->set_z(3.14/2 + 3.14/6);//(euler[0]+ 3.141596/2.0); // May be 90 degrees off.	
+	_ins.mutable_euler_angles()->set_z(euler[0] + 3.141596/2.0); // May be 90 degrees off.
 	_ins.mutable_euler_angles()->set_y(euler[1]);
 	_ins.mutable_euler_angles()->set_x(euler[2]);
 
@@ -712,8 +705,8 @@ bool imu_ins(msg_imu_raw_t* data){
 
 	if( (xStateVector[3] > 10) || (xStateVector[3] < -10 )){
 		_ins.set_type(apollo::drivers::gnss::Ins::INVALID);
-		if (timeSinceKalmanReset > 30){
-			init_kalman();
+		if (timeSinceKalamReset > 30){
+			initKalman();
 			ROS_WARN_STREAM("INS solution diverging. Resetting EKF...");
 		}
 	}

@@ -70,14 +70,6 @@ ErrorCode TwizyController::Init(const VehicleParameter& params,
     AERROR << "Steering96 does not exist in the TwizyMessageManager!";
 	return ErrorCode::CANBUS_ERROR;
   }  
-
-  gear_98_ = dynamic_cast<Gear98 *>(
-  message_manager_->GetMutableProtocolDataById(Gear98::ID)
-  );
-  if (gear_98_ == nullptr) {
-    AERROR << "Gear98 does not exist in the TwizyMessageManager!";
-	return ErrorCode::CANBUS_ERROR;
-  }  
    
   speed_9a_ = dynamic_cast<Speed9A *>(
   message_manager_->GetMutableProtocolDataById(Speed9A::ID)
@@ -88,8 +80,6 @@ ErrorCode TwizyController::Init(const VehicleParameter& params,
   }  
 
   can_sender_->AddMessage(Steering96::ID, steering_96_, false);
-  // Uncommented this because it's not used in Twizy
-  //can_sender_->AddMessage(Gear98::ID, gear_98_, false);
   can_sender_->AddMessage(Speed9A::ID, speed_9a_, false);
 
   // need sleep to ensure all messages received
@@ -146,26 +136,15 @@ Chassis TwizyController::chassis() {
   // ADD YOUR OWN CAR CHASSIS OPERATION
   // We assume that car isn't in motion when engine starts.
  
-  if(!chassis_detail.twizy().curr_speed().has_curr_speed()) {
-	  chassis_.set_speed_mps(0);
-  }
-  if(!chassis_detail.twizy().steering_angle().has_lws()) {
-	  chassis_.set_steering_percentage(0);
-  }
-  if(!chassis_detail.twizy().steering_angle().has_lws_speed()) {
-	  chassis_.set_steering_torque_nm(0);
-  }
-  if(!chassis_detail.twizy().gear_and_pedal().has_brake_pedalstatus()) {
-	  chassis_.set_brake_percentage(0);
-  }
-  if(!chassis_detail.twizy().gear_and_pedal().has_gear_r() ||
-	  !chassis_detail.twizy().gear_and_pedal().has_gear_n() ||
-	  !chassis_detail.twizy().gear_and_pedal().has_gear_d()) {
-	  chassis_.set_gear_location(Chassis::GEAR_NONE);
-	  }
-  
   chassis_.set_speed_mps(chassis_detail.twizy().curr_speed().curr_speed());
+  chassis_.set_steering_percentage(chassis_detail.twizy().steering_angle().lws());
+  chassis_.set_parking_brake(chassis_detail.twizy().gear_and_pedal().brake_pedalstatus());
   
+  if (chassis_detail.twizy().gear_and_pedal().gear_d()) {
+	  set_driving_mode(Chassis::COMPLETE_AUTO_DRIVE);
+	  chassis_.set_gear_location(apollo::canbus::Chassis::GEAR_DRIVE); //sets position to GEAR_DRIVE, see twizy.proto
+  }
+
   return chassis_;
 }
 
@@ -347,7 +326,7 @@ void TwizyController::Steer(double angle) {
   }*/
   // reverse sign
   // ADD YOUR OWN CAR CHASSIS OPERATION
-  AINFO << "the input angle is: " << angle << " degrees?";
+  angle = -(angle / 100) * 39.5;
   steering_96_->set_steering_angle(angle);
   
 }

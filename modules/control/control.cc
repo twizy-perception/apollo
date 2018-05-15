@@ -312,7 +312,7 @@ void Control::SendCmd(ControlCommand *control_command) {
     ADEBUG << "Skip publish control command in test mode";
     return;
   }
-  AdapterManager::PublishControlCommand(*control_command);
+  AdapterManager::PublishControlCommand2(*control_command);
 }
 
 void Control::Stop() {}
