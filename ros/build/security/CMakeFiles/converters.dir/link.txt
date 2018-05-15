@@ -1,0 +1,2 @@
+/usr/bin/ar cr /apollo/ros/devel/lib/libconverters.a  CMakeFiles/converters.dir/src/common_converter.cc.o CMakeFiles/converters.dir/src/localization_converter.cc.o CMakeFiles/converters.dir/src/control_cmd_converter.cc.o CMakeFiles/converters.dir/src/prediction_converter.cc.o CMakeFiles/converters.dir/src/perception_converter.cc.o CMakeFiles/converters.dir/src/speed_converter.cc.o
+/usr/bin/ranlib /apollo/ros/devel/lib/libconverters.a

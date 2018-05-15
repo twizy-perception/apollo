@@ -1,0 +1,2 @@
+/usr/bin/ar cr /apollo/ros/devel/lib/libbreakMsg.a  CMakeFiles/breakMsg.dir/src/brake_message.cc.o
+/usr/bin/ranlib /apollo/ros/devel/lib/libbreakMsg.a

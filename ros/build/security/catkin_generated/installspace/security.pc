@@ -1,0 +1,8 @@
+prefix=/apollo/ros/install
+
+Name: security
+Description: Description of security
+Version: 0.0.0
+Cflags: -I/apollo/ros/install/include
+Libs: -L/apollo/ros/install/lib 
+Requires: roscpp

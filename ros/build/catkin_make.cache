@@ -1,0 +1,2 @@
+security
+-DCATKIN_DEVEL_PREFIX=/apollo/ros/devel -DCMAKE_INSTALL_PREFIX=/apollo/ros/install -G Unix Makefiles
