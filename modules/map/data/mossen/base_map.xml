@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  https://www.maps.ie/coordinates.html
+-->
+<OpenDRIVE xmlns="http://www.opendrive.org">
+  <header
+    revMajor="1"
+    revMinor="0"
+    name="Chalmers HDMap Mossen"
+    version="1"
+    date="2018-04-10T09:35:00"
+    north="57.68459337885492"
+    south="57.68228766784876"
+    east="11.982479107440213"
+    west="11.977736961901883"
+    vendor="Perception Squad"
+  >
+    <geoReference>
+      <![CDATA[+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs]]>
+    </geoReference>
+  </header>
+  <road id="r1" junction="-1">
+    <link>
+      <!--
+      <predecessor elementType="road" elementId="nåt" contactPoint="start"/>
+      <successor elementType="road" elementId="nåt" contactPoint="end"/>
+      -->
+    </link>
+    <objects/>
+    <signals/>
+    <lanes>
+      <laneSection singleSide="true">
+        <boundaries>
+          <!-- Leftmost line containing the road (the reference line) -->
+          <boundary type="leftBoundary">
+            <geometry>
+              <pointSet>
+                  <point x="11.980835858791352" y="57.683750197136014" z="0"/>
+                  <point x="11.979556445091248" y="57.68334201672451" z="0"/>
+              </pointSet>
+            </geometry>
+          </boundary>
+          <!-- Rightmost line containing the road (the rightmost lanes border) -->
+          <boundary type="rightBoundary">
+            <geometry>
+              <pointSet>
+                  <point x="11.980778586924771" y="57.68378955422816" z="0"/>
+                  <point x="11.97950280091095" y="57.68338216600802" z="0"/>
+              </pointSet>
+            </geometry>
+          </boundary>
+        </boundaries>
+        <center>
+          <!-- reference line -->
+          <lane id="0" uid="r1_1_0" type="none">
+            <border>
+              <geometry sOffset="0" x="11.980835858791352" y="57.683750197136014" z="0" length="88.46">
+                <pointSet>
+                  <point x="11.980835858791352" y="57.683750197136014" z="0"/>
+                  <point x="11.979556445091248" y="57.68334201672451" z="0"/>
+                </pointSet>
+              </geometry>
+              <borderType sOffset="0" type="broken" color="white"/>
+            </border>
+          </lane>
+        </center>
+        <right>
+          <!-- First right lane -->
+          <lane id="-1" uid="r1_1_-1" type="driving" direction="forward" turnType="noTurn">
+            <centerLine> <!-- Lane center line -->
+              <geometry sOffset="0" x="11.98080722287361" y="57.68376987568532" z="0" length="88.46">
+                <pointSet>
+                  <point x="11.98080722287361" y="57.68376987568532" z="0"/>
+                  <point x="11.979529623015955" y="57.6833620913691" z="0"/>
+                </pointSet>
+              </geometry>
+            </centerLine>
+            <border> <!-- Lane right side border -->
+              <geometry sOffset="0" x="11.980778586924771" y="57.68378955422816" z="0" length="88.46">
+                <pointSet>
+                  <point x="11.980778586924771" y="57.68378955422816" z="0"/>
+                  <point x="11.97950280091095" y="57.68338216600802" z="0"/>
+                </pointSet>
+              </geometry>
+              <borderType sOffset="0" type="broken" color="white"/>
+            </border>
+            <link>
+              <!--
+              <predecessor id=""/>
+              <successor id=""/>
+              -->
+            </link>
+            <speed max="5"/>
+            <sampleAssociates>
+              <sampleAssociate sOffset="0.0" leftWidth="2.5" rightWidth="2.5"/>
+              <sampleAssociate sOffset="88.46" leftWidth="2.5" rightWidth="2.5"/>
+            </sampleAssociates>
+            <roadSampleAssociations>
+              <sampleAssociation sOffset="0.0" rightWidth="2.5" leftWidth="2.5"/>
+              <sampleAssociation sOffset="88.46" rightWidth="2.5" leftWidth="2.5"/>
+            </roadSampleAssociations>
+            <junctionOverlapGroup></junctionOverlapGroup>
+            <laneOverlapGroup></laneOverlapGroup>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+  <road id="r2" junction="-1">
+    <link>
+      <!--
+      <predecessor elementType="road" elementId="nåt" contactPoint="start"/>
+      <successor elementType="road" elementId="nåt" contactPoint="end"/>
+      -->
+    </link>
+    <objects/>
+    <signals/>
+    <lanes>
+      <laneSection singleSide="true">
+        <boundaries>
+          <!-- Leftmost line containing the road (the reference line) -->
+          <boundary type="leftBoundary">
+            <geometry>
+              <pointSet>
+                  <point x="11.980835858791352" y="57.683750197136014" z="0"/>
+                  <point x="11.979556445091248" y="57.68334201672451" z="0"/>
+              </pointSet>
+            </geometry>
+          </boundary>
+          <!-- Rightmost line containing the road (the rightmost lanes border) -->
+          <boundary type="rightBoundary">
+            <geometry>
+              <pointSet>
+                  <point x="11.980778586924771" y="57.68378955422816" z="0"/>
+                  <point x="11.97950280091095" y="57.68338216600802" z="0"/>
+              </pointSet>
+            </geometry>
+          </boundary>
+        </boundaries>
+        <center>
+          <!-- reference line -->
+          <lane id="0" uid="r2_1_0" type="none">
+            <border>
+              <geometry sOffset="0" x="11.97962322379771" y="57.68331215974795" z="0" length="87.09">
+                <pointSet>
+                  <point x="11.97962322379771" y="57.68331215974795" z="0"/>
+                  <point x="11.98088117982570" y="57.68371078313427" z="0"/>
+                </pointSet>
+              </geometry>
+              <borderType sOffset="0" type="broken" color="white"/>
+            </border>
+          </lane>
+        </center>
+        <right>
+          <!-- First right lane -->
+          <lane id="-1" uid="r2_1_-1" type="driving" direction="forward" turnType="noTurn">
+            <centerLine> <!-- Lane center line -->
+              <geometry sOffset="0" x="11.979651387006857" y="57.68329351897703" z="0" length="87.09">
+                <pointSet>
+                  <point x="11.979651387006857" y="57.68329351897703" z="0"/>
+                  <point x="11.980912025245237" y="57.68369214256899" z="0"/>
+                </pointSet>
+              </geometry>
+            </centerLine>
+            <border> <!-- Lane right side border -->
+              <geometry sOffset="0" x="11.97967955018703" y="57.68327487819987" z="0" length="87.09">
+                <pointSet>
+                  <point x="11.97967955018703" y="57.68327487819987" z="0"/>
+                  <point x="11.98094287063304" y="57.68367350199622" z="0"/>
+                </pointSet>
+              </geometry>
+              <borderType sOffset="0" type="broken" color="white"/>
+            </border>
+            <link>
+              <!--
+              <predecessor id=""/>
+              <successor id=""/>
+              -->
+            </link>
+            <speed max="5"/>
+            <sampleAssociates>
+              <sampleAssociate sOffset="0.0" leftWidth="2.5" rightWidth="2.5"/>
+              <sampleAssociate sOffset="88.46" leftWidth="2.5" rightWidth="2.5"/>
+            </sampleAssociates>
+            <roadSampleAssociations>
+              <sampleAssociation sOffset="0.0" rightWidth="2.5" leftWidth="2.5"/>
+              <sampleAssociation sOffset="88.46" rightWidth="2.5" leftWidth="2.5"/>
+            </roadSampleAssociations>
+            <junctionOverlapGroup></junctionOverlapGroup>
+            <laneOverlapGroup></laneOverlapGroup>
+          </lane>
+        </right>
+      </laneSection>
+    </lanes>
+  </road>
+</OpenDRIVE>
+
+
